@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.jean.jcplayer.model.JcAudio;
 import com.example.jean.jcplayer.view.JcPlayerView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +45,7 @@ public class MusicActivity extends AppCompatActivity {
     JcPlayerView jcPlayerView;
     List<JcAudio> jcAudios;
     List<String> thumbnail;
-
+    FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class MusicActivity extends AppCompatActivity {
         jcAudios = new ArrayList<>();
         thumbnail = new ArrayList<>();
         jcPlayerView = findViewById(R.id.jcplayer);
+        firebaseAuth = FirebaseAuth.getInstance();
         retrieveSongs();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,6 +117,11 @@ public class MusicActivity extends AppCompatActivity {
                 Intent intent = new Intent(this,UploadSongActivity.class);
                 startActivity(intent);
             }
+        }
+        else if(item.getItemId() == R.id.logout){
+            firebaseAuth.signOut();
+            finish();
+            startActivity(new Intent(MusicActivity.this,MainActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
